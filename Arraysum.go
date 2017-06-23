@@ -29,6 +29,12 @@ Input:
 Output:
 1*/
 
+type arrayDetail struct {
+	i   int
+	j   int
+	sum int
+}
+
 func main() {
 	var numOfCases, arrayLen, sum int
 	var arrayString string
@@ -43,13 +49,38 @@ func main() {
 			}
 		}
 		fmt.Scanf("%d", &sum)
-		fmt.Println(arrayLen)
 		numArrayString := strings.Split(arrayString, " ")
-		var numArray []int = make([]int, arrayLen)
-		var counter int = 0
+		var auxillaryArray []arrayDetail = make([]arrayDetail, 0)
+		var numArray []int = make([]int, 0)
 		for _, numString := range numArrayString {
-			numArray[counter], _ = strconv.Atoi(numString)
-			counter++
+			num, _ := strconv.Atoi(numString)
+			numArray = append(numArray, num)
 		}
+		var flag int = 0
+		for i := 0; i < arrayLen-1; i++ {
+			for j := i + 1; j < arrayLen; j++ {
+				if i != j {
+					var element arrayDetail
+					element.i = i
+					element.j = j
+					element.sum = numArray[i] + numArray[j]
+					auxillaryArray = append(auxillaryArray, element)
+				}
+			}
+		}
+		for i := 0; i < len(auxillaryArray)-1; i++ {
+			if flag == 1 {
+				break
+			}
+			for j := i + 1; j < len(auxillaryArray); j++ {
+				if auxillaryArray[i].sum+auxillaryArray[j].sum == sum && auxillaryArray[i].i != auxillaryArray[j].i &&
+					auxillaryArray[i].i != auxillaryArray[j].j &&
+					auxillaryArray[i].j != auxillaryArray[j].i &&
+					auxillaryArray[i].j != auxillaryArray[j].j {
+					flag = 1
+				}
+			}
+		}
+		fmt.Println(flag)
 	}
 }
